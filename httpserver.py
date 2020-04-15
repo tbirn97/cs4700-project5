@@ -1,43 +1,36 @@
 import argparse
 import http.server
 import socketserver
-import urllib
+import urllib.request
 import socket
-
-global DATA
 
 
 class RequestHandler(http.server.SimpleHTTPRequestHandler):
 
-    def __pull_index_file(self):
-        global DATA
+    def pull_index_file(self):
         try:
             print("trying to pull file")
-            file_listener = urllib.URLopener()
-            DATA = file_listener.retrieve("http://3.88.208.124/index.html", "test.html")
-            print("file pulled")
+            response = urllib.request.urlopen("http://3.88.208.124/index.html")
+            return response.read()
         except IOError:
             return None
 
     def do_GET(self):
-        global DATA
         print("do get")
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
-        if not DATA:
-            self.__pull_index_file()
-        print("Sending file")
-        self.wfile.write(bytes(DATA))
+        data = self.pull_index_file()
+        print("Sending file...")
+        self.wfile.write(bytes(data))
+
 
 def main(port, origin):
     print("Setting up server...")
-    server_handler = http.server.SimpleHTTPRequestHandler
+    server_handler = RequestHandler
     local_ip = socket.gethostname()
     http_serv = socketserver.TCPServer((local_ip, port), server_handler)
-    print(str(http_serv.server_address))
-    print("Server set up.")
-    print("Preparing to listen...")
+    print("Server set up. Preparing to listen...")
     try:
         http_serv.serve_forever()
     except KeyboardInterrupt:

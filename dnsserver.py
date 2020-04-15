@@ -16,6 +16,18 @@ class DNSServer:
         soc.bind((socket.gethostname(), self.port))
         return soc
 
+    def make_flags(self, data):
+        qr = '1'
+        opcode = ''.join([str(ord(data[0:1]&(1<<b)) for b in range(1,5)])
+        aa = '1'
+        tc = '0'
+        rd = '0'
+        ra = '0'
+        z = '000'
+        rcode = '0000'
+        flags = int(''.join([qr, opcode, aa, tc, rd, ra, z, rcode]), 2)
+        return flags.to_bytes(2, byteorder='big')
+
     def make_query_section(self, queries):
         return self.name + b'\x00\x01' + b'\x00\x01'
 
@@ -31,7 +43,7 @@ class DNSServer:
         #transaction id
         tid = data[0:2]
         #flags header
-        flags = flags_build(data[2:4])
+        flags = self.make_flags(data[2:4])
     
         #question count
         qdcount = b'\x00\x01'

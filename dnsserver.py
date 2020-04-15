@@ -20,6 +20,10 @@ class DNSServer:
         soc = self.__configure_socket()
 
 
+def main(args):
+    name = args.name
+    port = args.port
+    
 
 
 
@@ -35,4 +39,4 @@ if __name__ == '__main__':
     parser.add_argument('-n', dest='name', type=str, help='The CDN-specific name of the DNS server')
     parser.add_argument('-p', dest='port', type=int, help='The port on which to bind the DNS server')
     args = parser.parse_args()
-    server = DNSServer(args.name, args.port)
+    main(args)

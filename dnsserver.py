@@ -18,7 +18,7 @@ class DNSServer:
 
     def make_flags(self, data):
         qr = '1'
-        opcode = ''.join([str(ord(data[0:1]&(1<<b)) for b in range(1,5)])
+        opcode = ''.join([str(ord(data[0:1]&(1<<b))) for b in range(1,5)])
         aa = '1'
         tc = '0'
         rd = '0'

@@ -1,10 +1,13 @@
 # cs4700-project5
 
 1. Briefly describe the design decisions you are making in your DSN server and HTTP server.
+
 For our HTTP server, we used the built in http.server functionality to return only GET requests. It bound to it's local IP, and would get the file from the server if it didn't exist, but if it did we just return the cached file. The server runs until it is terminated by the user.
 {INSERT HOW DSN SERVER WORKDS}
+
 2. How would you change your DNS server to dynamically return an IP, instead of a hard coded IP?
 {INSERT DSN WORK}
+
 3. Explain how you would implement the mapping of incoming client requests to CDN servers, if you had several servers to pick from. Notice the CDN servers are geographically distributed, and so are clients. Be specific about what kind of measurement system you would implement, where exactly the data would be collected, and how you would then decide which server is the best option for a particular client.
 {INSERT ANSWER}
 

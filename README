@@ -1,15 +1,15 @@
 # cs4700-project5
 
-1. Briefly describe the design decisions you are making in your DSN server and HTTP server.
+1. Briefly describe the design decisions you are making in your DNS server and HTTP server.
 
 For our HTTP server, we used the built in http.server functionality to return only GET requests. It bound to it's local IP, and would get the file from the server if it didn't exist, but if it did we just return the cached file. The server runs until it is terminated by the user.
-{INSERT HOW DSN SERVER WORKDS}
+The DNS server receives a UDP DNS request and constructs a DNS header with a question and answer section following the DNS protocol RFC.
 
 2. How would you change your DNS server to dynamically return an IP, instead of a hard coded IP?
-{INSERT DSN WORK}
+The DNS Server would dynamically return an IP when the CDN looks up the IP address of the server that would optimally deliver requested content from the CDN. This would be accomplished with a directory of ip addresses that can be selected from by the DNS Server.
 
 3. Explain how you would implement the mapping of incoming client requests to CDN servers, if you had several servers to pick from. Notice the CDN servers are geographically distributed, and so are clients. Be specific about what kind of measurement system you would implement, where exactly the data would be collected, and how you would then decide which server is the best option for a particular client.
-{INSERT ANSWER}
+I would map client requests to CDN servers using passive measurement technique. I would implement a solution that uses scamper which passively contacts the servers in the CDN and collects data in each CDN node in a table of CDN servers. Each server entry in these tables at each node associates a ping metric from a scamper probe to each server. When scamper probes, this table is sorted to identify the server with the fastest connection. This table would be used to fetch the content when the node does not have the client's requested file cached. 
 
 4. Explain how you would implement caching for your HTTP server, if we were to send a range of requests to your HTTP server. What cache replacement strategy would you implement if content popularity followed a Zipfian distribution. How would your HTTP server respond to a request for a content that is not currently in the cache.
 

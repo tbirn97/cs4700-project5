@@ -22,8 +22,9 @@ class DNSServer:
 
     def __configure_socket(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        #localip = self.local_name_resolution()
-        localip = '127.0.0.1'
+        localip = self.local_name_resolution()
+        #localip = '127.0.0.1'
+        print("dns server setup at: ", str((localip, self.port)))
         self.sock.bind((localip, self.port))
         #print(self.sock)
 

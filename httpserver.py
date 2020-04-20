@@ -30,8 +30,8 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     def pull_index_file(self):
         try:
             #print("trying to pull file")
-            #response = urllib.request.urlopen("http://3.88.208.124/index.html")
-            response = open("test.origin", "r")
+            response = urllib.request.urlopen("http://3.88.208.124/index.html")
+            #response = open("test.origin", "r")
             return response.read()
         except IOError:
             return None

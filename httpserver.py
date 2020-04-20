@@ -10,16 +10,19 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
 
     def get_file_bytes(self):
         try:
-            f = open("index.html", "r")
+            f = open("cache/index.html", 'r')
             data = f.read()
-            return bytes(data)
+            return bytes(data, 'utf-8')
         except IOError:
             print("fetching file")
             data = self.pull_index_file()
-            f = open("index.html", "w+")
+            f = open("cache/index.html", 'x')
+            f = open("cache/index.html", 'w')
             f.write(str(data))
+            f = open("cache/index.html", 'r')
             data = f.read()
-            return bytes(data)
+            print(data)
+            return bytes(data, 'utf-8')
         finally:
             f.close()
             
@@ -27,8 +30,8 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
     def pull_index_file(self):
         try:
             print("trying to pull file")
-            if is_cache:
-            response = urllib.request.urlopen("http://3.88.208.124/index.html")
+            #response = urllib.request.urlopen("http://3.88.208.124/index.html")
+            response = open("test.origin", "r")
             return response.read()
         except IOError:
             return None
@@ -42,12 +45,22 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
         print("Sending file...")
         self.wfile.write(data)
     
-
+def local_name_resolution():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(('10.255.255.255', 1))
+        localip = s.getsockname()[0]
+    except:
+        localip = '127.0.0.1'
+    finally:
+        s.close()
+    return localip
 
 def main(port, origin):
     print("Setting up server...")
     server_handler = RequestHandler
-    local_ip = socket.gethostname()
+    local_ip = local_name_resolution()
+    print(local_ip)
     http_serv = socketserver.TCPServer((local_ip, port), server_handler)
     print("Server set up. Preparing to listen...")
     try:

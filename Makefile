@@ -6,6 +6,8 @@ DNS_NAME = dnsserver
 HTTP_NAME = httpserver
 DNS_PROGRAM = dnsserver.py
 HTTP_PROGRAM = httpserver.py
+FILE_NAME = index.html
+CACHE_NAME = cache/
 
 define HTTP_BODY
 #!/bin/bash
@@ -41,3 +43,4 @@ $(HTTP_NAME):
 clean:
 	-rm $(DNS_NAME)
 	-rm $(HTTP_NAME)
+	-rm $(CACHE_NAME)$(FILE_NAME)

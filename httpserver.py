@@ -14,14 +14,14 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
             data = f.read()
             return bytes(data, 'utf-8')
         except IOError:
-            print("fetching file")
+            #print("fetching file")
             data = self.pull_index_file()
             f = open("cache/index.html", 'x')
             f = open("cache/index.html", 'w')
             f.write(str(data))
             f = open("cache/index.html", 'r')
             data = f.read()
-            print(data)
+            #print(data)
             return bytes(data, 'utf-8')
         finally:
             f.close()
@@ -29,7 +29,7 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
             
     def pull_index_file(self):
         try:
-            print("trying to pull file")
+            #print("trying to pull file")
             #response = urllib.request.urlopen("http://3.88.208.124/index.html")
             response = open("test.origin", "r")
             return response.read()
@@ -37,12 +37,12 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
             return None
 
     def do_GET(self):
-        print("do get")
+        #print("do get")
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
         data = self.get_file_bytes()
-        print("Sending file...")
+        #print("Sending file...")
         self.wfile.write(data)
     
 def local_name_resolution():
@@ -57,12 +57,12 @@ def local_name_resolution():
     return localip
 
 def main(port, origin):
-    print("Setting up server...")
+    #print("Setting up server...")
     server_handler = RequestHandler
     local_ip = local_name_resolution()
-    print(local_ip)
+    print("server setup at address: ", str((local_ip, port)))
     http_serv = socketserver.TCPServer((local_ip, port), server_handler)
-    print("Server set up. Preparing to listen...")
+    #print("Server set up. Preparing to listen...")
     try:
         http_serv.serve_forever()
     except KeyboardInterrupt:

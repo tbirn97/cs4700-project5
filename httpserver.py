@@ -7,9 +7,27 @@ import socket
 
 class RequestHandler(http.server.SimpleHTTPRequestHandler):
 
+
+    def get_file_bytes(self):
+        try:
+            f = open("index.html", "r")
+            data = f.read()
+            return bytes(data)
+        except IOError:
+            print("fetching file")
+            data = self.pull_index_file()
+            f = open("index.html", "w+")
+            f.write(str(data))
+            data = f.read()
+            return bytes(data)
+        finally:
+            f.close()
+            
+            
     def pull_index_file(self):
         try:
             print("trying to pull file")
+            if is_cache:
             response = urllib.request.urlopen("http://3.88.208.124/index.html")
             return response.read()
         except IOError:
@@ -20,9 +38,10 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
-        data = self.pull_index_file()
+        data = self.get_file_bytes()
         print("Sending file...")
-        self.wfile.write(bytes(data))
+        self.wfile.write(data)
+    
 
 
 def main(port, origin):

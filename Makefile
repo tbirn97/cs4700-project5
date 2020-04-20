@@ -7,7 +7,7 @@ HTTP_NAME = httpserver
 DNS_PROGRAM = dnsserver.py
 HTTP_PROGRAM = httpserver.py
 FILE_NAME = index.html
-CACHE_NAME = cache/
+CACHE_NAME = cache
 
 define HTTP_BODY
 #!/bin/bash
@@ -24,7 +24,10 @@ endef
 
 export HTTP_BODY DNS_BODY
 
-all: dns_executable http_executable
+all: dns_executable http_executable cache
+
+cache: $(CACHE_NAME)
+	mkdir $(CACHE_NAME)
 
 dns_executable: $(DNS_NAME)
 	echo "$$DNS_BODY" > $(DNS_NAME)
@@ -43,4 +46,5 @@ $(HTTP_NAME):
 clean:
 	-rm $(DNS_NAME)
 	-rm $(HTTP_NAME)
-	-rm $(CACHE_NAME)$(FILE_NAME)
+	-rm $(CACHE_NAME)'/'$(FILE_NAME)
+	-rm -r $(CACHE_NAME)
